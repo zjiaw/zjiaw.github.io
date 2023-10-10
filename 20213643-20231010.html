@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>myVideo</title>
+ </head>
+ <body>
+   <div style="text-align:center">
+         <video id="myVideo" width="500"
+		 controls src="rem.mp4" type="video/mp4/">
+		 </video>
+		 <p><button onclick="last()">上一个</button></p>
+		 <button onclick="playPause()">播放/暂停</button>
+         <p><button onclick="next()">下一个</button></p>
+    </div>
+<script type="text/javascript">
+    var myVideo = document.getElementById("myVideo");
+    function playPause() {
+        if(myVideo.paused)
+            myVideo.play();
+        else
+            myVideo.pause();
+    }
+</script>
+</body>
+</html>
