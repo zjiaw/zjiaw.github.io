@@ -24,17 +24,29 @@
 		 controls src="saber.mp4"
 		 type="video/mp4/">
 		 </video>
-         <p><button onclick="last()">上一个</button></p>
+         <p><button onclick="previous()">上一个</button></p>
 	 <button onclick="playPause()">播放/暂停</button>
          <p><button onclick="next()">下一个</button></p>
     </div>
 <script type="text/javascript">
     var myVideo = document.getElementById("myVideo");
+    function previous() {
+      if (videoIndex > 0) {
+        videoIndex--;
+        videoElement.src = videos[videoIndex];
+      }
+    }
     function playPause() {
         if(myVideo.paused)
             myVideo.play();
         else
             myVideo.pause();
+    } 
+    function next() {
+      if (videoIndex < videos.length - 1) {
+        videoIndex++;
+        videoElement.src = videos[videoIndex];
+      }
     }
 </script>
 </body>
