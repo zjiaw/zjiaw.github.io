@@ -2,23 +2,46 @@
 <html>
     <meta http-equiv="Content-Type" content="text/html;charset=utf8">
 <head>
-    <title>html5 video播放/暂停开关</title>
+    <title>myVideo</title></title>
 </head>
-<body>
-    <div style="text-align:center">
+   <style>
+            h1 {
+                text-align: center;
+	        color:white;
+	    }
+</style>
+   <body background="背景.png">
+   <h1>视频播放</h1>
+   <div style="text-align:center">
+
+    <div style="text-align:center"> 
+        <p><button onclick="previous()">上一个</button></p>
         <button onclick="playPause()">播放/暂停</button>
-        <video id="myVideo" width="500">
+        <p><button onclick="next()">下一个</button></p>
+   <video id="myVideo" width="500">
             <source src="rem.mp4" type="video/mp4">
         </video>
     </div>
  
 <script type="text/javascript">
     var myVideo = document.getElementById("myVideo");
+     function previous() {
+      if (myVideo > 0) {
+        myVideo--;
+        videoElement.src = videos[myVideo];
+      }
+    }
     function playPause() {
         if(myVideo.paused)
             myVideo.play();
         else
             myVideo.pause();
+    } 
+    function next() {
+      if (myVideo < videos.length - 1) {
+        myVideo++;
+        videoElement.src = videos[myVideo];
+      }
     }
 </script>
 </body>
