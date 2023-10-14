@@ -23,7 +23,8 @@
          <p><button onclick="next()">下一个</button></p>
     </div>
 <script type="text/javascript">
-    function previous() {
+     var myVideo = document.getElementById("myVideo");
+     function previous() {
       if (videoIndex > 0) {
         videoIndex--;
         videoElement.src = videos[myVideo];
