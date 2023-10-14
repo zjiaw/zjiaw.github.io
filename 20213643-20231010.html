@@ -1,46 +1,24 @@
-<!doctype html>
-<html lang="en">
- <head>
-  <meta charset="UTF-8">
-  <meta name="Generator" content="EditPlus®">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="">
-  <title>myVideo</title>
- </head>
- <style>
-            h1 {
-                text-align: center;
-	        color:white;
-	    }
-</style>
- <body background="背景.png"> </body>
-         <h1>视频播放</h1>
-   <div style="text-align:center">
-         <p><button onclick="previous()">上一个</button></p>
-	 <button onclick="playPause()">播放/暂停</button>
-         <p><button onclick="next()">下一个</button></p>
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf8">
+<head>
+    <title>html5 video播放/暂停开关</title>
+</head>
+<body>
+    <div style="text-align:center">
+        <button onclick="playPause()">播放/暂停</button>
+        <video id="myVideo" width="500">
+            <source src="rem.mp4" type="video/mp4">
+        </video>
     </div>
+ 
 <script type="text/javascript">
-     var vList = ['rem.mp4','."zerptwo.mp4","selena.mp4", "saber.mp4"];
-     var myVideo = document.getElementById("myVideo");
-     function previous() {
-      if (myVideo > 0) {
-        myVideo--;
-        videoElement.src = videos[myVideo];
-      }
-    }
+    var myVideo = document.getElementById("myVideo");
     function playPause() {
         if(myVideo.paused)
             myVideo.play();
         else
             myVideo.pause();
-    } 
-    function next() {
-      if (myVideo < videos.length - 1) {
-        myVideo++;
-        videoElement.src = videos[myVideo];
-      }
     }
 </script>
 </body>
