@@ -22,12 +22,11 @@
          <p><button onclick="next()">下一个</button></p>
     </div>
 <script type="text/javascript">
-    var myVideo = document.getElementById("myVideo");
     var myVideos = ['rem.mp4', 'zerotwo.mp4', 'selena.mp4', 'saber.mp4];
     function previous() {
       if (videoIndex > 0) {
         videoIndex--;
-        videoElement.src = videos[videoIndex];
+        videoElement.src = videos[myVideo];
       }
     }
     function playPause() {
@@ -39,7 +38,7 @@
     function next() {
       if (videoIndex < videos.length - 1) {
         videoIndex++;
-        videoElement.src = videos[videoIndex];
+        videoElement.src = videos[myVideo];
       }
     }
 </script>
