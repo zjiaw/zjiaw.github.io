@@ -27,8 +27,8 @@
 <script type="text/javascript">
      var myVideo = document.getElementById("myVideo");
      function previous() {
-      if (videoIndex > 0) {
-        videoIndex--;
+      if (myVideo > 0) {
+        myVideo--;
         videoElement.src = videos[myVideo];
       }
     }
@@ -39,8 +39,8 @@
             myVideo.pause();
     } 
     function next() {
-      if (videoIndex < videos.length - 1) {
-        videoIndex++;
+      if (myVideo < videos.length - 1) {
+        myVideo++;
         videoElement.src = videos[myVideo];
       }
     }
