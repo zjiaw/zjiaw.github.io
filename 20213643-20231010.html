@@ -1,59 +1,47 @@
-
-<!DOCTYPE html>
-<html>
-
-<head>
-  <title>视频播放器</title>
-</head
-<body>
-  <h2>VideoPlayer</h2>
-  <div class="video-container">
-    <video id="myVideo" controls>
-      <source src="rem.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </div>
-  <button id="custom-button1" onclick="previous()">上一集</button>
-  <button id="play-pause-button">播放/暂停</button>
-  <button id="custom-button2" onclick="next()">下一集</button
-
-  <script>
-    var videos = [
-     "rem.mp4","zerptwo.mp4","selena.mp4", "saber.mp4"
-    ];
-
-    var videoIndex = 0;
-    var videoElement = document.getElementById('myVideo');
-    var playPauseButton = document.getElementById('play-pause-button');
-    videoElement.src = videos[videoIndex];
-    function previous() {
-      if (videoIndex > 0) {
-        videoIndex--;
-        videoElement.src = videos[videoIndex];
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>myVideo</title>
+ </head>
+ <style>
+            h1 {
+                text-align: center;
+	        color:white;
+	    }
+</style>
+ <body background="背景.png"> </body>
+         <h1>视频播放</h1>
+   <div style="text-align:center">
+         <p><button onclick="previous()">上一个</button></p>
+	 <button onclick="playPause()">播放/暂停</button>
+         <p><button onclick="next()">下一个</button></p>
+    </div>
+<script type="text/javascript">
+     var vList = ['rem.mp4','."zerptwo.mp4","selena.mp4", "saber.mp4"];
+     var myVideo = document.getElementById("myVideo");
+     function previous() {
+      if (myVideo > 0) {
+        myVideo--;
+        videoElement.src = videos[myVideo];
       }
     }
+    function playPause() {
+        if(myVideo.paused)
+            myVideo.play();
+        else
+            myVideo.pause();
+    } 
     function next() {
-      if (videoIndex < videos.length - 1) {
-        videoIndex++;
-        videoElement.src = videos[videoIndex];
+      if (myVideo < videos.length - 1) {
+        myVideo++;
+        videoElement.src = videos[myVideo];
       }
     }
-    function togglePlayPause() {
-      if (videoElement.paused) {
-        videoElement.play();
-        playPauseButton.innerHTML = '暂停';
-      } else {
-        videoElement.pause();
-        playPauseButton.innerHTML = '播放';
-      }
-    }
-    function playRandomVideo() {
-      videoElement.pause();
-      videoIndex = Math.floor(Math.random() * videos.length);
-      videoElement.src = videos[videoIndex];
-      videoElement.play();
-    }
-    playPauseButton.addEventListener('click', togglePlayPause);
-  </script>
+</script>
 </body>
 </html>
