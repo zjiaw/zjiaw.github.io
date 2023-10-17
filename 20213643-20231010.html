@@ -15,14 +15,15 @@
 	    }
 </style>
  <body background="背景.png"> </body>
-         <h1>视频播放</h1>
+         <h1>我的视频播放</h1>
    <div style="text-align:center">
          <p><button onclick="previous()">上一个</button></p>
 	 <button onclick="playPause()">播放/暂停</button>
          <p><button onclick="next()">下一个</button></p>
     </div>
 <script type="text/javascript">
-     var vList = ["rem.mp4","zerptwo.mp4","selena.mp4", "saber.mp4"];
+<video id="myVideo" width="600px">
+        <source src="rem.mp4","zerptwo.mp4","selena.mp4", "saber.mp4">
      var myVideo = document.getElementById("myVideo");
      function previous() {
       if (myVideo > 0) {
