@@ -20,10 +20,11 @@
          <p><button onclick="previous()">上一个</button></p>
 	 <button onclick="playPause()">播放/暂停</button>
          <p><button onclick="next()">下一个</button></p>
+		 <video id="myVideo" width="500">
+            <source src="rem.mp4" type="video/mp4">
+        </video>
     </div>
 <script type="text/javascript">
-<video id="myVideo" width="600px">
-     var myVideo =["rem.mp4","zerptwo.mp4","selena.mp4", "saber.mp4"];
      var myVideo = document.getElementById("myVideo");
      function previous() {
       if (myVideo > 0) {
@@ -45,4 +46,4 @@
     }
 </script>
 </body>
-</html>
+</html> 
