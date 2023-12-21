@@ -2,7 +2,7 @@ var mediaData = {
     
     path: "https://github.com/bujixiaoyu/bujixiaoyu.github.io/tree/main/images/" ,            
     afaceURL : ["images/face1.jpg","images/face2.jpg","images/face3.jpg","images/face4.jpg","images/face5.jpg"] ,
-    names : ["曾令昱","周嘉旺","黄建忠","宁方昀","李健宏老师"] ,    
+    names : ["周嘉旺","曾令昱","黄建忠","宁方昀","李健宏老师"] ,    
       podPath: "https:/jxzy-dmxy.jxstnu.edu.cn/" ,
       videoPath: "https:/jxzy-dmxy.jxstnu.edu.cn/tedVideos/" ,
     podFileStruct: [
