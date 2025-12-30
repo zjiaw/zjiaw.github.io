@@ -1,200 +1,281 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>新年新气象</title>
+    <title>2026也要加油鸭！！！</title>
+    <script src="https://lib.baomitu.com/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        /* 全局样式重置 & Apple风格基础配置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        /* ================= CSS 样式区域 ================= */
+        :root { --china-red: #d32f2f; --gold: #ffcf5e; --paper: #fff9c4; --grape-green: #9acd32; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: "Microsoft YaHei", sans-serif; background: #000; overflow-x: hidden; color: white; }
+        .view-section { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: relative; padding-bottom: 50px; overflow: hidden; }
+        .view-section.active { display: flex; }
+
+        /* 视频背景 */
+        .video-bg { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; z-index: 0; transform: translateX(-50%) translateY(-50%); object-fit: cover; opacity: 0.8; }
+
+        /* 烟花层 */
+        canvas#fireworks { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+
+        /* 内容层 */
+        .lantern, .timer-container, .nav-btn, h1, #grape-layer, .controls, #music-controls { position: relative; z-index: 10; }
+
+        .nav-btn { margin-top: 30px; padding: 10px 20px; border: 1px solid var(--gold); background: rgba(0,0,0,0.4); color: var(--gold); border-radius: 20px; cursor: pointer; font-size: 14px; transition: 0.3s; }
+        .nav-btn:hover { background: var(--gold); color: #b71c1c; }
+        .lantern { position: absolute; top: 20px; font-size: 60px; filter: drop-shadow(0 0 10px rgba(0,0,0,0.3)); }
+        .lantern-l { left: 10%; } .lantern-r { right: 10%; }
+        .timer-container { display: flex; gap: 20px; margin-top: 30px; padding: 20px; }
+        .flip-card { background: linear-gradient(180deg, #b71c1c 0%, #d32f2f 100%); width: 90px; height: 120px; border-radius: 12px; font-size: 70px; font-weight: bold; color: var(--gold); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 0px #8b1515, 0 15px 25px rgba(0,0,0,0.4); border: 2px solid var(--gold); }
+        .flip-label { text-align: center; margin-top: 15px; font-size: 18px; color: var(--gold); font-weight: bold; }
+
+        /* 愿望板 */
+        #view-2 { background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png'); background-color: var(--china-red); }
+        #capture-area { width: 90%; max-width: 900px; display: flex; flex-direction: column; align-items: center; padding: 20px; border-radius: 10px; background: #b71c1c; border: 8px double var(--gold); box-shadow: inset 0 0 20px rgba(0,0,0,0.5); transition: background 0.3s; position: relative; background-size: cover; background-position: center; }
+        .board-content { width: 100%; min-height: 400px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 20px; justify-content: center; }
+        .note { width: 150px; height: 150px; background: var(--paper); padding: 15px; color: #333; box-shadow: 5px 5px 15px rgba(0,0,0,0.3); transform: rotate(-2deg); display: flex; flex-direction: column; justify-content: space-between; position: relative; border-bottom-right-radius: 30px 5px; }
+        .note:nth-child(even) { transform: rotate(2deg); }
+        .note.completed { background: #d1d1d1; text-decoration: line-through; opacity: 0.8; }
+        .delete-btn { position: absolute; top: 5px; right: 5px; cursor: pointer; color: #999; font-weight: bold; }
+
+        .diy-toolbar { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 30px; border: 1px solid var(--gold); }
+        .diy-btn { background: var(--gold); border: none; padding: 5px 15px; border-radius: 20px; color: #b71c1c; font-weight: bold; cursor: pointer; font-size: 12px; }
+        .bg-preset { width: 35px; height: 35px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.7); cursor: pointer; background-size: cover; background-position: center; transition: transform 0.2s, border-color 0.2s; }
+        .bg-preset:hover { transform: scale(1.1); border-color: var(--gold); }
+
+        .controls { margin-top: 20px; text-align: center; width: 100%; display: flex; justify-content: center; }
+        input#wishInput { padding: 12px; border: none; width: 200px; outline: none; border: 2px solid var(--gold); border-radius: 5px 0 0 5px; }
+        button.add-btn { padding: 12px 20px; background: var(--gold); border: 2px solid var(--gold); cursor: pointer; font-weight: bold; color: #b71c1c; border-radius: 0 5px 5px 0; }
+        button.share-btn { margin-top: 30px; padding: 15px 40px; border-radius: 40px; background: var(--gold); color: #b71c1c; border: none; font-weight: bold; font-size: 18px; cursor: pointer; box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+
+        /* 🔥 音乐播放器悬停交互区 🔥 */
+        #music-controls { position: fixed; top: 20px; right: 20px; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; z-index: 100; }
+
+        #music-row {
+            display: flex; align-items: center;
+            padding: 5px; border-radius: 30px;
+            transition: all 0.3s;
         }
 
-        body {
-            background-color: #fafafa; /* Apple经典浅灰背景，柔和不刺眼 */
-            color: #1d1d1f; /* Apple正文深色，保证可读性 */
-            line-height: 1.6;
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto; /* 水平居中，贴合Apple官网布局 */
+
+        #music-player {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: rgba(0,0,0,0.6); border: 2px solid var(--gold);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; user-select: none; font-size: 20px;
+            z-index: 2; /* 保证图标在最上层 */
+        }
+        .rotating { animation: spin 4s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .volume-hidden-area {
+            width: 0;           /* 平时宽度为0 */
+            opacity: 0;         /* 平时透明 */
+            overflow: hidden;   /* 超出隐藏 */
+            display: flex; align-items: center; gap: 5px;
+            /* 关键点：离开时没有延迟，迅速收回 */
+            transition: width 0.4s ease, opacity 0.4s ease;
         }
 
-        /* 标题样式 - Apple风格简约大气 */
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            font-weight: 600; /* 适中加粗，不臃肿 */
-            color: #1d1d1f;
-            margin-bottom: 60px; /* 充足留白，提升高级感 */
-            letter-spacing: 0.5px; /* 细微字间距，优化排版 */
+        #volume-slider { width: 80px; height: 4px; accent-color: var(--gold); cursor: pointer; margin-right: 10px; }
+
+        #music-row:hover {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--gold);
         }
 
-        /* 表格样式 - Apple风格精致规整 */
-        table {
-            width: 70%;
-            margin: 0 auto; /* 水平居中 */
-            border-collapse: collapse; /* 合并边框，更精致 */
-            background-color: #ffffff; /* 白色背景，层次分明 */
-            border-radius: 16px; /* 大圆角，Apple标志性风格 */
-            overflow: hidden; /* 隐藏圆角外内容 */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* 柔和阴影，提升立体感 */
+        /* 当鼠标悬停在整个容器上时，控制音量区域的显示 */
+        #music-row:hover .volume-hidden-area {
+            width: 100px; /* 展开宽度 */
+            opacity: 1;   /* 显示 */
+            transition-delay: 0.5s;
         }
 
-        /* 表头样式 */
-        th {
-            background-color: #f5f5f7; /* 浅灰表头背景，区分内容 */
-            font-size: 1.1rem;
-            font-weight: 500;
-            padding: 20px 15px;
-            text-align: center;
-            color: #86868b; /* 浅灰文字，低调高级 */
-            border-bottom: 1px solid #e8e8ed; /* 细微分隔线，不突兀 */
-        }
+        #playlist-panel { display: none; background: rgba(0,0,0,0.85); border: 1px solid var(--gold); border-radius: 10px; padding: 10px; min-width: 150px; margin-top: 5px; }
+        #playlist-panel.show { display: block; }
+        .song-item { padding: 8px 12px; color: #ddd; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 14px; }
+        .song-item.active { color: var(--gold); font-weight: bold; }
 
-        /* 表格内容单元格 */
-        td {
-            padding: 18px 15px;
-            text-align: center;
-            font-size: 1rem;
-            border-bottom: 1px solid #f0f0f2; /* 柔和分隔线，提升规整度 */
-            transition: background-color 0.3s ease; /* 过渡效果，更细腻 */
-        }
+        /* 葡萄 */
+        #grape-layer { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); z-index: 50; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.5s; }
+        #grape-layer.active { display: flex; }
+        .grape-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 320px; }
+        .grape { width: 60px; height: 60px; background: var(--grape-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #050a10; font-weight: bold; font-size: 24px; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.2), 0 0 15px rgba(154, 205, 50, 0.6); transition: all 0.2s; }
+        .grape.eaten { background: #444; color: #666; transform: scale(0.8); opacity: 0.3; box-shadow: none; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* 表格行hover效果 - Apple风格优雅交互 */
-        tr:hover td {
-            background-color: #f9f9fb; /* 悬停浅灰背景，反馈柔和 */
-        }
-
-        /* 最后一行去除下边框 */
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        /* 链接样式 - Apple风格精致交互 */
-        a {
-            color: #0066cc; /* Apple经典链接蓝色 */
-            text-decoration: none; /* 去除默认下划线 */
-            position: relative;
-            font-weight: 400;
-            transition: color 0.3s ease; /* 颜色过渡，更丝滑 */
-        }
-
-        /* 链接下划线效果 - Apple风格优雅（悬停显示渐变下划线） */
-        a::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: -2px;
-            width: 0;
-            height: 2px;
-            background-color: #0066cc;
-            transition: width 0.3s ease; /* 宽度过渡，丝滑展开 */
-        }
-
-        a:hover {
-            color: #0071e3; /* 悬停加深蓝色，更醒目 */
-        }
-
-        a:hover::after {
-            width: 100%; /* 悬停时下划线展开 */
-        }
-
-        /* 顶部快捷链接样式（个人照片/论文） */
-        .shortcut-area {
-            width: 70%;
-            margin: 0 auto 40px auto; /* 与表格保持一致宽度，居中排列 */
-            display: flex;
-            justify-content: center;
-            gap: 40px; /* 间距均匀，更规整 */
-            padding: 20px 0;
-        }
-
-        .shortcut-area a {
-            font-size: 1.1rem;
-        }
-
-        /* 响应式适配 - 移动端兼容 */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-                margin-bottom: 40px;
-            }
-
-            table {
-                width: 95%;
-            }
-
-            .shortcut-area {
-                width: 95%;
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-            }
-
-            th {
-                font-size: 1rem;
-                padding: 15px 10px;
-            }
-
-            td {
-                font-size: 0.9rem;
-                padding: 15px 10px;
-            }
-        }
+        @media (max-width: 600px) { h1 { font-size: 1.5rem !important; } .timer-container { gap: 10px; padding: 10px; } .flip-card { width: 60px; height: 80px; font-size: 36px; } .lantern { font-size: 40px; top: 10px; } #capture-area { width: 95%; padding: 10px; } input#wishInput { width: 140px; } .grape { width: 50px; height: 50px; font-size: 18px; } }
     </style>
 </head>
 <body>
-    <h1>新年祝福</h1>
 
-    <div class="shortcut-area">
-        <a href="倒计时.mp4">倒计时</a>
+<div id="music-controls">
+    <div id="music-row">
+        <div class="volume-hidden-area">
+            <span style="font-size:12px; margin-left:10px;">🔈</span>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.3" oninput="changeVolume(this.value)">
+        </div>
+
+        <div id="music-player" onclick="toggleMusic()">🎵</div>
+    </div>
+    <div style="font-size: 24px; cursor: pointer; text-align:right; margin-right:10px;" onclick="document.getElementById('playlist-panel').classList.toggle('show')">📜</div>
+
+    <div id="playlist-panel"></div>
+</div>
+<audio id="bgm" loop></audio>
+
+<div id="view-1" class="view-section">
+    <video autoplay muted loop playsinline class="video-bg">
+        <source src="/static/media/bg_video.mp4" type="video/mp4">
+    </video>
+
+    <h1 style="color: var(--gold); letter-spacing: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem; text-align: center;">距离 2026 跨年还有</h1>
+
+    <div class="timer-container">
+        <div><div class="flip-card" id="d">00</div><div class="flip-label">天</div></div>
+        <div><div class="flip-card" id="h">00</div><div class="flip-label">时</div></div>
+        <div><div class="flip-card" id="m">00</div><div class="flip-label">分</div></div>
+        <div><div class="flip-card" id="s">00</div><div class="flip-label">秒</div></div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>祝福类型</th>
-                <th>链接</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>20240422</td>
-                <td><a href="1.1.html">第一次作业</a></td>
-            </tr>
-            <tr>
-                <td>20240423</td>
-                <td><a href="1.2.html">第二次作业</a></td>
-            </tr>
-            <tr>
-                <td>20240422</td>
-                <td><a href="1.3.html">第三次作业</a></td>
-            </tr>
-            <tr>
-                <td>2024</td>
-                <td><a href="1.4.html">第四次作业</a></td>
-            </tr>
-            <tr>
-                <td>2024</td>
-                <td><a href="1.5.html">第五次作业</a></td>
-            </tr>
-            <tr>
-                <td>2024</td>
-                <td><a href="1.6.html">第六次作业</a></td>
-            </tr>
-            <tr>
-                <td>2024</td>
-                <td><a href="1.7.html">第七次作业</a></td>
-            </tr>
-            <tr>
-                <td>2024</td>
-                <td><a href="1.8.html">第八次作业</a></td>
-            </tr>
-        </tbody>
-    </table>
+    <button class="nav-btn" onclick="switchView(2)">✍️ 去写我的新年愿望</button>
+    <canvas id="fireworks"></canvas>
+
+    <div id="grape-layer">
+        <h2 style="color: var(--gold); margin-bottom: 20px; font-size: 2rem;">🍇 准备吃葡萄！ 🍇</h2>
+        <div class="grape-container">
+            <div class="grape" id="g12">12</div><div class="grape" id="g11">11</div>
+            <div class="grape" id="g10">10</div><div class="grape" id="g9">9</div>
+            <div class="grape" id="g8">8</div><div class="grape" id="g7">7</div>
+            <div class="grape" id="g6">6</div><div class="grape" id="g5">5</div>
+            <div class="grape" id="g4">4</div><div class="grape" id="g3">3</div>
+            <div class="grape" id="g2">2</div><div class="grape" id="g1">1</div>
+        </div>
+        <p style="margin-top:20px; font-size: 1.2rem; color: #ccc;">跟着倒数，一秒一颗！</p>
+    </div>
+    <button onclick="startGrapeTest()" style="position:fixed; bottom:10px; left:10px; z-index:999; opacity:0.5; font-size:12px; padding:5px;">🍇 测试葡萄模式</button>
+</div>
+
+<div id="view-2" class="view-section">
+    <div class="diy-toolbar">
+        <span style="font-size:12px; color:var(--gold)">🎨 装修背景:</span>
+        <button class="diy-btn" onclick="document.getElementById('bg-upload').click()">📂 上传</button>
+        <input type="file" id="bg-upload" accept="image/*" style="display:none" onchange="uploadBg(this)">
+
+        <div class="bg-preset" style="background-image: url('/static/media/bj1.jpg')" onclick="setBgImage('/static/media/bj1.jpg')"></div>
+        <div class="bg-preset" style="background-image: url('/static/media/bj2.jpg')" onclick="setBgImage('/static/media/bj2.jpg')"></div>
+        <div class="bg-preset" style="background-image: url('/static/media/bj3.jpg')" onclick="setBgImage('/static/media/bj3.jpg')"></div>
+        <button class="diy-btn" style="padding: 5px 10px; font-size: 10px;" onclick="setBgColor('#b71c1c')">🔄 默认</button>
+    </div>
+
+    <div id="capture-area">
+        <h1 style="color: var(--gold); text-shadow: 2px 2px 5px rgba(0,0,0,0.5); font-size: 2rem; margin-bottom: 20px; text-align: center;">🏮 2026 愿望清单 🏮</h1>
+        <div class="board-content" id="wishBoard"></div>
+    </div>
+
+    <div class="controls">
+        <input type="text" id="wishInput" placeholder="写下明年的动力吧...">
+        <button class="add-btn" onclick="saveWish()">贴贴</button>
+    </div>
+
+    <button class="share-btn" onclick="share()">📸 保存我的 DIY 愿望单</button>
+    <button id="back-to-timer-btn" class="nav-btn" onclick="switchView(1)">⬅️ 返回倒计时</button>
+</div>
+
+<script>
+    const TARGET_DATE = new Date('2026-01-01 00:00:00').getTime();
+
+    // 音乐逻辑
+    const songList = [
+        { name: "🎵 音乐1", url: "/static/media/bj1.mp3" },
+        { name: "🎵 音乐2", url: "/static/media/bj2.mp3" },
+        { name: "🎵 音乐3", url: "/static/media/bj3.mp3" }
+    ];
+
+    let currentSongIndex = 0;
+    const bgm = document.getElementById('bgm');
+    const musicPlayer = document.getElementById('music-player');
+
+    // 初始化音量：30%
+    bgm.volume = 0.28;
+
+    function changeVolume(val) {
+        bgm.volume = val;
+    }
+
+    function initMusic() {
+        const panel = document.getElementById('playlist-panel'); panel.innerHTML = '';
+        songList.forEach((song, index) => {
+            const div = document.createElement('div'); div.className = `song-item ${index === currentSongIndex ? 'active' : ''}`;
+            div.innerText = song.name; div.onclick = () => playSong(index); panel.appendChild(div);
+        });
+    }
+    function playSong(index) {
+        currentSongIndex = index; bgm.src = songList[index].url;
+        bgm.play().then(() => { console.log("播放成功"); musicPlayer.classList.add('rotating'); })
+            .catch(e => { console.error(e); musicPlayer.classList.remove('rotating'); alert("播放失败：找不到文件 " + songList[index].url + "\n请确认mp3文件和html在同一个文件夹里！"); });
+        initMusic();
+    }
+    function toggleMusic() {
+        if (bgm.paused) {
+            if (!bgm.src) bgm.src = songList[currentSongIndex].url;
+            bgm.play().then(() => musicPlayer.classList.add('rotating'))
+                .catch(e => { alert("无法播放，请点击一下页面任意位置后再试。"); });
+        } else { bgm.pause(); musicPlayer.classList.remove('rotating'); }
+    }
+    initMusic();
+
+    // 倒计时 & 葡萄
+    function initApp() {
+        const now = new Date().getTime();
+        if (now >= TARGET_DATE) {
+            document.getElementById('view-2').classList.add('active');
+            const v1 = document.getElementById('view-1'); if(v1) v1.remove();
+            const backBtn = document.getElementById('back-to-timer-btn'); if(backBtn) backBtn.style.display = 'none';
+        } else { document.getElementById('view-1').classList.add('active'); startTimer(); startFireworks(); }
+    }
+    function switchView(n) { document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active')); document.getElementById(`view-${n}`).classList.add('active'); }
+    function startTimer() {
+        const timer = setInterval(() => {
+            const now = new Date().getTime(); const diff = TARGET_DATE - now;
+            if (diff <= 0) { clearInterval(timer); location.reload(); return; }
+            document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById('h').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
+            document.getElementById('m').innerText = Math.floor((diff / 1000 / 60) % 60).toString().padStart(2, '0');
+            document.getElementById('s').innerText = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+            const secondsLeft = diff / 1000; if (secondsLeft <= 12.5 && secondsLeft > 0) { showGrapes(Math.ceil(secondsLeft)); }
+        }, 1000);
+    }
+    function showGrapes(seconds) {
+        const layer = document.getElementById('grape-layer'); if (!layer.classList.contains('active')) layer.classList.add('active');
+        for (let i = 12; i >= 1; i--) {
+            const grape = document.getElementById(`g${i}`);
+            if (i > seconds) { grape.classList.add('eaten'); } else { grape.classList.remove('eaten'); if(i === seconds) grape.style.transform = "scale(1.1)"; }
+        }
+    }
+    function startGrapeTest() { let testSec = 13; alert("模拟最后12秒吃葡萄"); const testTimer = setInterval(() => { testSec--; if(testSec <= 0) { clearInterval(testTimer); alert("新年快乐！测试结束"); location.reload(); } else { showGrapes(testSec); } }, 1000); }
+
+    //愿望板
+    let db; const request = indexedDB.open("Year2026DB", 1);
+    request.onupgradeneeded = e => { db = e.target.result; db.createObjectStore("wishes", { keyPath: "id", autoIncrement: true }); };
+    request.onsuccess = e => { db = e.target.result; renderWishes(); };
+    function saveWish() { const val = document.getElementById('wishInput').value; if (!val) return; const tx = db.transaction("wishes", "readwrite"); tx.objectStore("wishes").add({ text: val, done: false }); tx.oncomplete = () => { document.getElementById('wishInput').value = ''; renderWishes(); }; }
+    function renderWishes() { const board = document.getElementById('wishBoard'); board.innerHTML = ''; if(!db) return; db.transaction("wishes").objectStore("wishes").openCursor().onsuccess = e => { const cursor = e.target.result; if (cursor) { const item = cursor.value; const div = document.createElement('div'); div.className = `note ${item.done ? 'completed' : ''}`; div.innerHTML = `<span class="delete-btn" onclick="deleteWish(${item.id})">×</span><p style="word-break:break-all; margin-top:10px;">${item.text}</p><label style="font-size:12px;cursor:pointer"><input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggle(${item.id})"> 已实现</label>`; board.appendChild(div); cursor.continue(); } }; }
+    function deleteWish(id) { if(confirm('确认删除？')) { const tx = db.transaction("wishes", "readwrite"); tx.objectStore("wishes").delete(id); tx.oncomplete = renderWishes; } }
+    function toggle(id) { const tx = db.transaction("wishes", "readwrite"); const store = tx.objectStore("wishes"); store.get(id).onsuccess = e => { const d = e.target.result; d.done = !d.done; store.put(d); }; tx.oncomplete = renderWishes; }
+    function share() { html2canvas(document.querySelector("#capture-area"), { useCORS: true, allowTaint: true, backgroundColor: null }).then(canvas => { const a = document.createElement('a'); a.href = canvas.toDataURL(); a.download = '2026-愿望单.png'; a.click(); }); }
+    function uploadBg(input) { if (input.files && input.files[0]) { const reader = new FileReader(); reader.onload = function (e) { setBgImage(e.target.result); }; reader.readAsDataURL(input.files[0]); } }
+    function setBgImage(url) { const area = document.getElementById('capture-area'); area.style.backgroundColor = 'transparent'; area.style.backgroundImage = `url('${url}')`; area.style.boxShadow = "inset 0 0 20px rgba(0,0,0,0.5)"; }
+    function setBgColor(color) { const area = document.getElementById('capture-area'); area.style.backgroundImage = 'none'; area.style.backgroundColor = color; area.style.boxShadow = "0 0 50px rgba(0,0,0,0.5)"; }
+
+    // --- 烟花 ---
+    const canvas = document.getElementById('fireworks'); const ctx = canvas.getContext('2d');
+    let particles = []; function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } window.onresize = resize; resize();
+    class Particle { constructor(x, y, color) { this.x = x; this.y = y; this.color = color; this.velocity = { x: (Math.random() - 0.5) * 12, y: (Math.random() - 0.5) * 12 }; this.alpha = 1; this.friction = 0.96; } draw() { ctx.save(); ctx.globalAlpha = this.alpha; ctx.beginPath(); ctx.arc(this.x, this.y, 2.5, 0, Math.PI * 2); ctx.fillStyle = this.color; ctx.fill(); ctx.restore(); } update() { this.velocity.x *= this.friction; this.velocity.y *= this.friction; this.x += this.velocity.x; this.y += this.velocity.y; this.alpha -= 0.01; } }
+    function startFireworks() { function animate() { if (!document.getElementById('view-1').classList.contains('active')) return; requestAnimationFrame(animate); ctx.clearRect(0, 0, canvas.width, canvas.height); if (Math.random() < 0.1) { const colors = ['#gold', '#fff', '#ffeb3b']; const x = Math.random() * canvas.width, y = Math.random() * canvas.height * 0.4; for (let i = 0; i < 60; i++) particles.push(new Particle(x, y, colors[Math.floor(Math.random() * colors.length)])); } particles.forEach((p, i) => { if (p.alpha > 0) { p.update(); p.draw(); } else { particles.splice(i, 1); } }); } animate(); }
+
+    initApp();
+</script>
 </body>
 </html>
