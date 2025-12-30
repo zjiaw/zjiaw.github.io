@@ -126,7 +126,7 @@
 
 <div id="view-1" class="view-section">
     <video autoplay muted loop playsinline class="video-bg">
-        <source src="bg_video.mp4" type="video/mp4">
+        <source src="bg1.mp4" type="video/mp4">
     </video>
 
     <h1 style="color: var(--gold); letter-spacing: 5px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 2.5rem; text-align: center;">距离 2026 跨年还有</h1>
@@ -154,7 +154,7 @@
         </div>
         <p style="margin-top:20px; font-size: 1.2rem; color: #ccc;">跟着倒数，一秒一颗！</p>
     </div>
-    <button onclick="startGrapeTest()" style="position:fixed; bottom:10px; left:10px; z-index:999; opacity:0.5; font-size:12px; padding:5px;">🍇 测试葡萄模式</button>
+    <button onclick="startGrapeTest()" style="position:fixed; bottom:10px; left:10px; z-index:999; opacity:0.5; font-size:12px; padding:5px;">🍇 吃葡萄倒数模式</button>
 </div>
 
 <div id="view-2" class="view-section">
@@ -163,7 +163,7 @@
         <button class="diy-btn" onclick="document.getElementById('bg-upload').click()">📂 上传</button>
         <input type="file" id="bg-upload" accept="image/*" style="display:none" onchange="uploadBg(this)">
 
-        <div class="bg-preset" style="background-image: url('/static/media/bj1.jpg')" onclick="setBgImage('/static/media/bj1.jpg')"></div>
+        <div class="bg-preset" style="background-image: url('bj1.png')" onclick="setBgImage('bj1.png')"></div>
         <div class="bg-preset" style="background-image: url('/static/media/bj2.jpg')" onclick="setBgImage('/static/media/bj2.jpg')"></div>
         <div class="bg-preset" style="background-image: url('/static/media/bj3.jpg')" onclick="setBgImage('/static/media/bj3.jpg')"></div>
         <button class="diy-btn" style="padding: 5px 10px; font-size: 10px;" onclick="setBgColor('#b71c1c')">🔄 默认</button>
